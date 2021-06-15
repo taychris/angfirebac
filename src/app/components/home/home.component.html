@@ -1,0 +1,58 @@
+<ul>
+    <li *ngFor='let doc of myArray'>
+        <p>Name: {{doc.name}}</p>
+        <p>Age: {{doc.age}}</p>
+    </li>
+  </ul>
+  
+  <form [formGroup]="this.employeeForm">
+    <input
+      placeholder="Employee Name"
+      formControlName="newName"
+      type="text"
+      required
+    />
+    <input
+    placeholder="Employee Age"
+    formControlName="newAge"
+    type="number"
+    required
+  />
+    <button (click)="onSubmit()" [disabled]="!this.employeeForm.valid">
+      Submit
+    </button>
+  </form>
+  
+  <br>
+  
+  <form [formGroup]="this.secondForm">
+    <input
+      placeholder="Name to get"
+      formControlName="valueToGet"
+      type="text"
+    />
+    <button (click)="onQuery()">
+      Query
+    </button>
+  </form>
+  
+  <div *ngIf="person">
+    <h1>{{person.name}}</h1>
+    <button style="background-color: lightblue" (click)="openEdit()">Edit</button>
+    <button style='background-color: red' (click)='delete()'>Delete</button>
+  </div>
+  
+  <h1 style="color: red;">{{message || null}}</h1>
+  
+  <form *ngIf="edit" [formGroup]="this.editForm">
+    <input
+      placeholder="{{person.name}}"
+      formControlName="replaceValue"
+      type="text"
+    />
+    <button (click)="onRename()">
+      Rename
+    </button>
+  </form>
+  <p style="color: red;">{{message2 || null}}</p>
+  
