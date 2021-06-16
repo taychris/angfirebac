@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@Angular/forms";
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AuthService } from '../../shared/service/auth.service';
+import { User, Employee } from '../../shared/service/user';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,7 @@ export class HomeComponent implements OnInit {
   id: string = '';
   edit: boolean = false;
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore, public authService: AuthService) { }
 
   ngOnInit() {
     this.docs = [];
@@ -32,18 +34,31 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
-    let Record = { name: this.employeeForm.value.newName, age: this.employeeForm.value.newAge };
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    let Record = { 
+      name: this.employeeForm.value.newName, 
+      age: this.employeeForm.value.newAge, 
+      byUser: { 
+        uid : currentUser.uid, 
+        displayName: currentUser.displayName, 
+        email: currentUser.email, 
+      }};
     console.log(Record);
 
-    this.firestore.collection('Employee').add(Record)
-    .then(res => {
-      this.message = "Employee added successfully.";
-      console.log(res);
-      this.employeeForm.reset();
-    })
-    .catch(e => {
-      console.log(e);
-    })
+    if(currentUser.uid != null) {
+      this.firestore.collection('Employee').add(Record)
+      .then(res => {
+        this.message = "Employee added successfully.";
+        console.log(res);
+        this.employeeForm.reset();
+      })
+      .catch(e => {
+        console.log(e);
+      })
+    } else {
+      window.alert('You must be logged in to create an item.')
+    }
+    
   }
 
   onQuery() {
@@ -61,7 +76,6 @@ export class HomeComponent implements OnInit {
             ss.docs.forEach(doc => {
               this.message = 'Successfully found.';
               this.person = doc.data();
-              console.log(this.person);
             })
           }
         })

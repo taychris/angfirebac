@@ -5,3 +5,9 @@ export interface User {
     photoURL: string;
     emailVerified: boolean;
  }
+
+ export interface Employee {
+    newName: string;
+    newAge: number;
+    user: User;
+ }

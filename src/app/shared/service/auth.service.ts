@@ -5,6 +5,7 @@ import "firebase/auth";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +17,16 @@ export class AuthService {
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,  
+    public location: Location,
     public ngZone: NgZone) { 
       this.afAuth.authState.subscribe(user => {
-        if (user) {
+       if (user) {
           this.userData = user;
           localStorage.setItem('user', JSON.stringify(this.userData));
           JSON.parse(localStorage.getItem('user'));
-          this.router.navigate(['dashboard']);
+          if (this.router.url === '/sign-in') {
+            this.router.navigate(['dashboard'])
+          }
         } else {
           localStorage.setItem('user', null);
           JSON.parse(localStorage.getItem('user'));
@@ -88,9 +92,11 @@ export class AuthService {
 
   // Sign in with Google
   GoogleAuth() {
-    return this.AuthLogin(new firebase.auth.GoogleAuthProvider()).then((result) => {
+    return this.AuthLogin(new firebase.auth.GoogleAuthProvider())
+    .then((result) => {
       this.ngZone.run(() => {
-        this.router.navigate(['dashboard']);
+        //this.location.replaceState('/');
+        this.router.navigate(['../dashboard']);
       });
     }).catch((error) => {
       window.alert(error.message)

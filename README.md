@@ -1,3 +1,14 @@
+# To commit new features use the following commands
+
+`git add .`
+`git commit -m "message"`
+`git branch -M main`
+`git push -u origin main`
+
+To change repository use the following command:
+
+`git remote add origin git@github.com:taychris/testrepo.git`
+
 # AngularFirebaseCrud
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.3.

@@ -2,6 +2,7 @@
     <li *ngFor='let doc of myArray'>
         <p>Name: {{doc.name}}</p>
         <p>Age: {{doc.age}}</p>
+        <p>Order: {{doc.byUser.displayName}}</p>
     </li>
   </ul>
   
